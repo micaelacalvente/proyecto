@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}Noticias{% endblock titulo %}
+{% block contenido %}
+    <h2>Mi noticia detallada</h2>
+    <div class="noti">
+        <img src="{{noticias.imagenes.url}}" width="30%">
+        <h3>{{noticias.titulo}}</h3>
+        <p>{{noticias.contenido}}</p>
+        <p>{{noticias.fecha_publicacion}}</p>
+        <p>{{noticias.categoria_noticia}}</p>
+        <br>
+        <a href="{% url 'noticias:listar' %}">VOLVER</a>
+    </div>
+{% endblock contenido %}
