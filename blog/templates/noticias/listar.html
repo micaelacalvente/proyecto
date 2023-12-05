@@ -3,16 +3,28 @@
 {% block titulo %}Noticias{% endblock titulo %}
 {% block contenido %}
     <h2>aca estan mis noticias !</h2>
-    <div class="submenu">
-        <a href="{% url 'noticias:listar'%}">TODAS</a>
-        {% for cat in categorias %}
-            <a href="?id={{cat.pk}}">{{cat.nombre}}</a>
-        {% endfor %}
-        <a href="?antiguedad_asc=A">Mas antiguas primero</a>
-        <a href="?antiguedad_desc=D">Mas recientes primero</a>
-        <a href="?orden_asc=1">A - Z</a>
-        <a href="?orden_desc=1">Z - A</a>
-    </div>
+    <form method="get" action="{% url 'noticias:listar'%}">
+        <select name="id">
+            <option value="">Todas</option>
+            {% for cat in categorias %}
+                <option value="{{cat.pk}}">{{cat.nombre}}</option>
+            {% endfor %}
+        </select>
+        
+        <select name="antiguedad">
+            <option value="">Ordenar por Antigüedad</option>
+            <option value="asc">Más antiguas primero</option>
+            <option value="desc">Más recientes primero</option>
+        </select>
+        
+        <select name="orden">
+            <option value="">Ordenar alfabéticamente</option>
+            <option value="asc">A - Z</option>
+            <option value="desc">Z - A</option>
+        </select>
+        
+        <input type="submit" value="Filtrar">
+    </form>    
     {% for noticia in noticias %}
         <h3><a href="{% url 'noticias:detalle' noticia.pk %}">Titulo: {{noticia.titulo}}</a></h3>
         <img src="{{noticia.imagenes.url}}" width="10%">
