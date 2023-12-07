@@ -9,6 +9,13 @@
         <p>{{noticias.contenido}}</p>
         <p>{{noticias.fecha_publicacion}}</p>
         <p>{{noticias.categoria_noticia}}</p>
+        <p>Autor: {{noticias.autor}}</p>
+        {% if user.is_authenticated and noticias.autor == user %}
+            <form method="POST" action="{% url 'noticias:detalle' pk=noticias.pk %}">
+                {% csrf_token %}
+                <button type="submit" name="delete_noticia">BORRAR</button>
+            </form>
+        {% endif %}  
         <br>
         <a href="{% url 'noticias:listar' %}">VOLVER</a>
     </div>

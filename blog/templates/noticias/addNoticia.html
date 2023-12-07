@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titulo %}Noticias{% endblock titulo %}
+{% block contenido %}
+    <h2>Crea una noticia</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock contenido %}
