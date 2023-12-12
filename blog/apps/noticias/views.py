@@ -65,33 +65,6 @@ def DetalleNoticia(request, pk):
     return render (request, 'noticias/detalle.html', contexto)
 
 
-###### REVISAR EDITAR NOTICIA
-@login_required
-def EditarNoticia(request, pk):
-    noticia = get_object_or_404(Noticia, pk = pk) 
-
-    if request.method == 'POST':
-        form = NoticiaForm(request.POST, request.FILES, instance = noticia)
-        
-        if form.is_valid():
-            form.save()
-            return redirect('noticias:detalle', pk = pk)
-        else:
-            form = NoticiaForm(instance=noticia)
-
-    # solo el autor puede editar la noticia
-    if noticia.autor != request.user:
-        return HttpResponseForbidden("No tenes permiso para editar esta noticia") 
-    
-    
-    contexto = {
-        'form': form
-    }
-
-    return render(request, 'noticias/editar.html', contexto)
-
-##########################################################################
-
 @login_required
 def AddNoticia(request):
     if request.method == 'POST':
@@ -128,3 +101,24 @@ def BorrarComentario(request, comentario_id):
         comentario.delete()
     
     return redirect('noticias:detalle', pk = comentario.noticia.pk)
+
+@login_required
+def EditarNoticia(request, pk):
+    noticia = get_object_or_404(Noticia, pk=pk)
+
+    # Solo el autor puede editar la noticia
+    if noticia.autor != request.user:
+        return HttpResponseForbidden("No tenes permiso para editar esta noticia.")
+
+    if request.method == 'POST':
+        form = NoticiaForm(request.POST, request.FILES, instance=noticia)
+        if form.is_valid():
+            form.save()
+            return redirect('noticias:detalle', pk=pk)
+    else:
+        form = NoticiaForm(instance=noticia)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'noticias/editar.html', context)
