@@ -11,12 +11,36 @@
         <p>{{noticias.categoria_noticia}}</p>
         <p>Autor: {{noticias.autor}}</p>
         {% if user.is_authenticated and noticias.autor == user %}
+            <a href="{ % url 'noticias:edit_noticia' pk=noticias.pk % }">Editar</a>
             <form method="POST" action="{% url 'noticias:detalle' pk=noticias.pk %}">
                 {% csrf_token %}
                 <button type="submit" name="delete_noticia">BORRAR</button>
             </form>
-        {% endif %}  
-        <br>
-        <a href="{% url 'noticias:listar' %}">VOLVER</a>
+        {% endif %}
     </div>
+        <br>
+        <h4>Comentarios</h4>
+        {% for comentario in comentarios %}
+            <p><strong>{{comentario.usuario}} - {{comentario.fecha_creacion}}</strong></p>
+            <p>{{comentario.contenido}}</p>
+            <form method="post" action="{% url 'noticias:delete_comentario' comentario.id %}">
+                {% csrf_token %}
+                {% if comentario.usuario == user.username %}
+                    <button type="submit">Borrar</button>
+                {% endif %}
+            </form>
+        <br>
+        {% endfor %}
+        {% if user.is_authenticated %} 
+            <h4>Añadir comentarios</h4>
+            <form method="post" action="{% url 'noticias:add_comentario' noticias.pk %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Enviar</button>
+            </form>
+        {% else %}
+            <p>Debe iniciar sesión para dejar un comentario</p>
+            <a href="{% url 'login' %}">INICIAR SESION</a>
+        {% endif %}
+        <a href="{% url 'noticias:listar' %}">VOLVER</a>
 {% endblock contenido %}

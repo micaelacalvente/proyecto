@@ -21,3 +21,12 @@ class Noticia(models.Model):
 
     def __str__(self):
         return self.titulo
+    
+class Comentario(models.Model):
+    noticia = models.ForeignKey(Noticia, on_delete=models.CASCADE, related_name='comentarios')
+    contenido = models.TextField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    usuario = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.contenido
