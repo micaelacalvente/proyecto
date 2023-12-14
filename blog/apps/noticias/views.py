@@ -4,6 +4,7 @@ from .models import Noticia, Categoria, Comentario
 from .forms import NoticiaForm, ComentarioForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 
 def ListarNoticias(request):
     contexto = {}
@@ -122,3 +123,28 @@ def EditarNoticia(request, pk):
         'form': form,
     }
     return render(request, 'noticias/editar.html', context)
+
+# EDITAR COMENTARIOS
+@login_required #debes estar loggeado para poder editar
+def EditarComentario(request, comentario_id):
+    comentario = get_object_or_404(Comentario, id=comentario_id)
+
+    # mensaje de error si no sos el autor del comentario
+    if comentario.usuario != request.user.username:
+        messages.error(request, 'No tenes permiso para editar este comentario')
+        return redirect('noticias:detalle', pk=comentario.noticia.pk)
+    
+    if request.method == 'POST':
+        form = ComentarioForm(request.POST, instance=comentario)
+        if form.is_valid():
+            form.save()
+            return redirect('noticias:detalle', pk=comentario.noticia.pk)
+    else:
+        form = ComentarioForm(instance=comentario)
+    
+    contexto = {
+        'form':form,
+        'comentario':comentario,
+    }
+
+    return render(request, 'noticias/editar_comentario.html', contexto)

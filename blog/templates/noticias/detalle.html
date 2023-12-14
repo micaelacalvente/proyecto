@@ -10,7 +10,7 @@
         <p>{{noticias.fecha_publicacion}}</p>
         <p>{{noticias.categoria_noticia}}</p>
         <p>Autor: {{noticias.autor}}</p>
-        {% if user.is_authenticated and noticias.autor == user %}
+        {% if user.is_authenticated and noticia.autor == user or user.is_staff %}
         <a href="{% url 'noticias:edit_noticia' pk=noticias.pk %}">Editar</a>
             <form method="POST" action="{% url 'noticias:detalle' pk=noticias.pk %}">
                 {% csrf_token %}
@@ -27,6 +27,7 @@
                 {% csrf_token %}
                 {% if comentario.usuario == user.username %}
                     <button type="submit">Borrar</button>
+                    <a href="{% url 'noticias:edit_comentario' comentario_id=comentario.id %}">Editar</a>
                 {% endif %}
             </form>
         <br>
