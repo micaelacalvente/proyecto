@@ -2,5 +2,10 @@
 {% load static %}
 {% block titulo %}Home{% endblock titulo %}
 {% block contenido %}
-    <h2>hola mundo</h2>
+    <h2>Ultimas noticias</h2>
+    {% for noticia in ultimas_noticias %}
+        <h3><a href="{% url 'noticias:detalle' noticia.pk %}">Titulo: {{noticia.titulo}}</a></h3>
+        <img src="{{noticia.imagenes.url}}" width="10%">
+        <br>
+    {% endfor %}
 {% endblock contenido %}

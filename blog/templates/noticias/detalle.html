@@ -25,7 +25,7 @@
             <p>{{comentario.contenido}}</p>
             <form method="post" action="{% url 'noticias:delete_comentario' comentario.id %}">
                 {% csrf_token %}
-                {% if comentario.usuario == user.username %}
+                {% if comentario.usuario == user.username or user.is_staff %}
                     <button type="submit">Borrar</button>
                     <a href="{% url 'noticias:edit_comentario' comentario_id=comentario.id %}">Editar</a>
                 {% endif %}

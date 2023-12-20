@@ -108,8 +108,8 @@ def EditarNoticia(request, pk):
     noticia = get_object_or_404(Noticia, pk=pk)
 
     # Solo el autor puede editar la noticia
-    if noticia.autor != request.user:
-        return HttpResponseForbidden("No tenes permiso para editar esta noticia.")
+    #if noticia.autor != request.user:
+        #return HttpResponseForbidden("No tenes permiso para editar esta noticia.")
 
     if request.method == 'POST':
         form = NoticiaForm(request.POST, request.FILES, instance=noticia)
@@ -130,9 +130,9 @@ def EditarComentario(request, comentario_id):
     comentario = get_object_or_404(Comentario, id=comentario_id)
 
     # mensaje de error si no sos el autor del comentario
-    if comentario.usuario != request.user.username:
-        messages.error(request, 'No tenes permiso para editar este comentario')
-        return redirect('noticias:detalle', pk=comentario.noticia.pk)
+    #if comentario.usuario != request.user.username:
+        #messages.error(request, 'No tenes permiso para editar este comentario')
+        #return redirect('noticias:detalle', pk=comentario.noticia.pk)
     
     if request.method == 'POST':
         form = ComentarioForm(request.POST, instance=comentario)
